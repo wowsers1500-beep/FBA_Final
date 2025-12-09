@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QB Stats</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">QB Stats Dashboard</div>
+            <nav class="nav-menu">
+                <a href="../index.html" class="nav-link">Home</a>
+                <a href="qb-stats.html" class="nav-link active">QB Stats</a>
+            </nav>
+        </div>
+    </div>
+
+    <div class="qb-stats-container">
+        <h1>Quarterback Statistics</h1>
+        
+        <div class="search-section">
+            <input 
+                type="text" 
+                id="searchInput" 
+                placeholder="Search for a player..." 
+                class="search-bar"
+            >
+        </div>
+
+        <div class="table-section">
+            <div class="table-wrapper">
+                <table id="statsTable" class="sortable-table">
+                    <thead>
+                        <tr>
+                            <th data-column="player">Player</th>
+                            <th data-column="pass_yds">Pass Yds</th>
+                            <th data-column="yds_att">Yds/Att</th>
+                            <th data-column="att">Att</th>
+                            <th data-column="cmp">Cmp</th>
+                            <th data-column="cmp_pct">Cmp %</th>
+                            <th data-column="td">TD</th>
+                            <th data-column="int">Int</th>
+                            <th data-column="passer_rating">Passer Rating</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="charts-section">
+            <h2>Performance Correlations</h2>
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <h3>Passer Rating vs Interceptions</h3>
+                    <canvas id="ratingVsInt"></canvas>
+                    <div class="tooltip" id="tooltipInt"></div>
+                </div>
+                <div class="chart-container">
+                    <h3>Passer Rating vs Touchdowns</h3>
+                    <canvas id="ratingVsTd"></canvas>
+                    <div class="tooltip" id="tooltipTd"></div>
+                </div>
+                <div class="chart-container">
+                    <h3>Passer Rating vs Completion %</h3>
+                    <canvas id="ratingVsCmp"></canvas>
+                    <div class="tooltip" id="tooltipCmp"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/data.js"></script>
+    <script src="../js/table.js"></script>
+    <script src="../js/charts.js"></script>
+</body>
+</html>

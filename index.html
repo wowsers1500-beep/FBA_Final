@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QB Stats Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">QB Stats Dashboard</div>
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-link active">Home</a>
+                <a href="pages/qb-stats.html" class="nav-link">QB Stats</a>
+            </nav>
+        </div>
+    </div>
+
+    <div class="home-container">
+        <h1 class="page-title">QB Stats and Passer Rating Home Page</h1>
+
+        <div class="sections">
+            <div class="github-link-section">
+                <p><a href="https://github.com/wowsers1500-beep/FBA_Final" target="_blank" class="github-button">Repository Link</a></p>
+            </div>
+            <section class="project-section">
+                <h2>Overview</h2>
+                <div class="section-content">
+                    <p>For my final project I decided to learn to calculate an all-encompassing QB passing stat, passer rating. My goal was to see how individual QB stats related to passer rating. The formula for passer rating includes 5 main variables. Pass attempts (att), completions (cmp), passing yards (pass_yds), touchdown passes (td), and interceptions (int).</p>
+                    
+                    <p><strong>The formula follows:</strong></p>
+                    
+                    <div class="formula-box">
+                        <p>a = (cmp/att - 0.3) × 5</p>
+                        <p>b = (pass_yds/att - 3) × 0.25</p>
+                        <p>c = (td/att) × 20</p>
+                        <p>d = 2.375 - (int/att × 25)</p>
+                        <p style="margin-top: 1rem; font-weight: bold;">Passer Rating = ((a + b + c + d) / 6) × 100</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="project-section">
+                <h2>Web Scraping</h2>
+                <div class="section-content">
+                    <p>For the web scraping portion of the project all of my data came from the <a href="https://www.nfl.com/stats/player-stats/category/passing/2024/reg/all/passingyards/desc" target="_blank">NFL's 2024 QB Stat Page</a>.</p>
+                    
+                    <p>I was also assisted by the <a href="https://en.wikipedia.org/wiki/Passer_rating" target="_blank">Wikipedia page for Passer Rating</a> for manually calculating each QB's passer rating.</p>
+                    
+                    <p><strong>Libraries Used:</strong> BeautifulSoup, requests, csv, and pandas</p>
+                    
+                    <p><strong>Python Code:</strong></p>
+                    <div class="code-box">
+                        <pre>import requests
+from bs4 import BeautifulSoup
+import csv
+import pandas as pd
+
+page = requests.get('https://www.nfl.com/stats/player-stats/category/passing/2024/reg/all/passingyards/desc')
+soup = BeautifulSoup(page.content, 'html.parser')
+head = soup.find_all('thead')
+table = soup.find_all('tbody')
+
+image = ['Image']
+headers_list = [h.strip() for h in head[0].text.split('\n\n') if h.strip()]
+qb_header = image + headers_list[:8]
+rows = table[0].find_all('tr')
+all_row_data = []
+
+for row in rows:
+    row_data = []
+    imgs = row.find_all('img')
+    picture_url = imgs[0]['src']
+    row_data.append(picture_url)
+    
+    cells = row.find_all("td")
+    for cell in cells[:8]:
+        text = cell.text.strip()
+        row_data.append(text)
+    
+    all_row_data.append(row_data)
+
+qb_stats = pd.DataFrame(all_row_data, columns=qb_header)
+qb_stats.to_csv('qb_stats_pics.csv', index=False)
+
+from google.colab import files
+files.download('qb_stats_pics.csv')</pre>
+                    </div>
+                    
+                    <p><strong>AI Assistant Help:</strong> Append the qb_header list and the all_row_data list to a csv file simply</p>
+                    <p><em>#Asked AI to convert my scraped data into a csv</em></p>
+                    
+                    <p>Can you make the new web scraped data convert to the csv</p>
+                    <p><em>#Adjustment for new player picture data</em></p>
+                </div>
+            </section>
+
+            <section class="project-section">
+                <h2>Database</h2>
+                <div class="section-content">
+                    <p>Using the SQL query below, I calculated each QB's passer rating using the data I originally scraped. Then I added a passer_rating column to my database and exported that as a csv. You can see this csv on the QB Stats page.</p>
+                    
+                    <p><strong>SQL Query Used:</strong></p>
+                    <div class="code-box">
+                        <pre>SELECT *,
+  (
+    (
+      MIN(MAX(((CAST(cmp AS REAL) / att) - 0.3) * 5, 0), 2.375)
+      +
+      MIN(MAX(((CAST(pass_yds AS REAL) / att) - 3) * 0.25, 0), 2.375)
+      +
+      MIN(MAX(((CAST(td AS REAL) / att) * 20), 0), 2.375)
+      +
+      MIN(MAX((2.375 - ((CAST(int AS REAL) / att) * 25)), 0), 2.375)
+    ) / 6.0
+  ) * 100 AS passer_rating
+FROM qb_stats;</pre>
+                    </div>
+                </div>
+            </section>
+
+            <section class="project-section">
+                <h2>Web Application</h2>
+                <div class="section-content">
+                    <p>The point of this Web Application is to explain and visualize the passer rating stat for QBs. Using the interactive table and scatter plots the user can view how individual stats affect a QB passer rating stat. This provides insight into what makes the best passers in the league.</p>
+                </div>
+            </section>
+        </div>
+    </div>
+</body>
+</html>
