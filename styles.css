@@ -70,6 +70,18 @@ body {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
+.server-notice {
+    max-width: 900px;
+    margin: 0 auto 1.5rem auto;
+    background: rgba(255,255,255,0.95);
+    padding: 0.9rem 1rem;
+    border-radius: 8px;
+    color: #222;
+    font-size: 0.95rem;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
 .github-link-section {
     background: white;
     padding: 1.5rem;

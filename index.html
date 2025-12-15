@@ -20,6 +20,10 @@
     <div class="home-container">
         <h1 class="page-title">QB Stats and Passer Rating Home Page</h1>
 
+        <div id="serverNotice" class="server-notice" role="note" aria-live="polite">
+            <strong>Tip:</strong> Run this project with VS Code's <em>Live Server</em> (right-click → "Open with Live Server") or run <code>python3 -m http.server 8000</code> from the project root and open <code>http://localhost:8000/</code>. If you're opening the files directly (file:///) some features may not work — use Live Server for best results.
+        </div>
+
         <div class="sections">
             <div class="github-link-section">
                 <p><a href="https://github.com/wowsers1500-beep/FBA_Final" target="_blank" class="github-button">Repository Link</a></p>
@@ -129,4 +133,13 @@ FROM qb_stats;</pre>
         </div>
     </div>
 </body>
+<script>
+// If the page is opened via file:// show more explicit instruction in the notice
+document.addEventListener('DOMContentLoaded', () => {
+    const notice = document.getElementById('serverNotice');
+    if (window.location.protocol === 'file:') {
+        notice.innerHTML = '<strong>Tip:</strong> You are opening files directly (file:///). For full functionality use VS Code Live Server (right-click -> "Open with Live Server") or run <code>python3 -m http.server 8000</code> in the project root and open <code>http://localhost:8000/</code>.';
+    }
+});
+</script>
 </html>
